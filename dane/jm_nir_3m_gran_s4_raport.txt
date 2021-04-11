@@ -1,0 +1,54 @@
+band: 1	gleby	iglasty	lisciasty	roslinnosc	woda	zabudowa_05	zabudowa_30
+gleby	471,60	479,00	576,40	655,12	576,30	1342,04	1150,64
+iglasty		272,00	317,44	807,68	860,00	1296,28	1072,20
+lisciasty			346,40	831,28	915,75	1231,10	974,32
+roslinnosc				750,30	591,10	1342,98	1183,00
+woda					388,67	1378,53	1227,35
+zabudowa_05						980,78	813,44
+zabudowa_30							592,25
+
+band: 2	gleby	iglasty	lisciasty	roslinnosc	woda	zabudowa_05	zabudowa_30
+gleby	621,30	593,56	700,52	762,84	622,85	1371,78	1228,56
+iglasty		296,40	385,28	893,96	881,25	1348,38	1162,04
+lisciasty			486,80	929,88	948,60	1281,48	1044,96
+roslinnosc				900,00	721,15	1372,74	1255,60
+woda					442,50	1386,78	1268,75
+zabudowa_05						1033,09	836,18
+zabudowa_30							676,25
+
+band: 3	gleby	iglasty	lisciasty	roslinnosc	woda	zabudowa_05	zabudowa_30
+gleby	819,70	743,20	818,44	801,88	691,15	1388,70	1287,32
+iglasty		330,00	461,44	883,60	863,10	1381,08	1252,16
+lisciasty			604,40	948,64	935,25	1303,68	1116,72
+roslinnosc				928,00	714,70	1395,28	1312,92
+woda					527,67	1394,53	1299,10
+zabudowa_05						1011,91	822,86
+zabudowa_30							768,25
+
+band: 4	gleby	iglasty	lisciasty	roslinnosc	woda	zabudowa_05	zabudowa_30
+gleby	656,80	887,20	847,04	710,96	596,10	974,26	1036,92
+iglasty		521,00	480,76	716,76	1072,25	714,06	872,84
+lisciasty			509,80	720,96	1038,95	668,60	741,72
+roslinnosc				808,90	820,85	890,44	1023,44
+woda					626,50	1116,62	1164,20
+zabudowa_05						755,53	626,76
+zabudowa_30							377,75
+
+band: 5	gleby	iglasty	lisciasty	roslinnosc	woda	zabudowa_05	zabudowa_30
+gleby	702,30	940,08	896,64	765,16	619,15	1103,42	1089,44
+iglasty		598,90	530,12	826,16	1061,45	816,98	942,32
+lisciasty			572,70	821,80	1018,25	769,72	820,92
+roslinnosc				923,50	829,50	1068,18	1108,12
+woda					666,33	1183,33	1150,75
+zabudowa_05						854,73	686,36
+zabudowa_30							505,00
+
+band: 6	gleby	iglasty	lisciasty	roslinnosc	woda	zabudowa_05	zabudowa_30
+gleby	688,80	961,68	945,24	817,56	634,05	1253,02	1159,88
+iglasty		707,20	612,28	967,56	1038,10	1070,90	1039,76
+lisciasty			673,50	967,16	1006,15	1010,38	938,80
+roslinnosc				1044,80	903,55	1267,10	1205,88
+woda					712,67	1243,42	1132,25
+zabudowa_05						1060,62	823,04
+zabudowa_30							680,50
+
