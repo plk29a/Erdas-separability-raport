@@ -1,4 +1,5 @@
-import os, sys
+import os
+
 
 class Error(Exception):
     def __init__(self, len1, len2):
@@ -7,6 +8,7 @@ class Error(Exception):
 
     def __str__(self):
         return f'Tabela z opisem stosunków {self.len1}, ma inna wielkosc niz tabela z stosunkami {self.len2}'
+
 
 class Legend:
     def read_legend(self):
@@ -42,6 +44,7 @@ class Legend:
         legend_records = self._clean_legend(legend_records)
         self.legend = self._dict_legend(legend_records)
         return self.legend
+
 
 class SeparabilityListing:
     def __init__(self, separability_listing_array):
@@ -81,6 +84,8 @@ class SeparabilityListing:
 class ListingFile(Legend, SeparabilityListing):
     def __init__(self, file):
         self.file_path = file
+        self.file_out = os.path.splitext(file)[0] + '_raport.txt'
+
         self.file = self.open_file()
         self.file_name = os.path.split(file)[-1]
 
@@ -116,11 +121,11 @@ class ListingFile(Legend, SeparabilityListing):
                 line = line.strip()
                 array_class_pair.append(line)
 
-    def read_file(self):
+    def read_file_writeraport(self):
         self.skip_lines(11)
         self.legend = self.create_legend()
         results_dict = {}
-        outcome_file = open(file_out, 'w+')
+        outcome_file = open(self.file_out, 'w+')
         for one_band in self.separability_listing_reader():
             band, array_description, array_values = one_band
             array = zip(array_description, array_values)
@@ -129,7 +134,7 @@ class ListingFile(Legend, SeparabilityListing):
             results_dict[band] = outcoms
             outcome_file.write((f'band: {band}\t' + '\t'.join(self.legend.keys())))
             for type1, valu1 in self.legend.items():
-                outcome_file.write(f'\n{type1}\t')
+                outcome_file.write(f'\n{type1}')
                 for type2, valu2 in self.legend.items():
                     array_copy = array.copy()
                     choosen = filter(lambda x: x[0][0] in valu1 and x[0][1] in valu2, array_copy)
@@ -140,27 +145,18 @@ class ListingFile(Legend, SeparabilityListing):
 
                     try:
                         average = suma / amount
-                        print(f'{type1} - {type2}')
-                        print(f'srednia: {average}')
-                        outcome_file.write(format(average, '.2f').replace('.',',') + '\t')
+                        outcome_file.write('\t' + format(average, '.2f').replace('.',','))
                         outcoms.append([type1, type2, average])
                     except Exception as e:
                         outcome_file.write('\t')
                         pass
-                # outcome_file.write('\n\n')
             outcome_file.write('\n\n')
-
         outcome_file.close()
-
-        ...
-
 
 
 if __name__ == '__main__':
-    # file = input(r'wskaz plik: ')
-    file = r'E:\Radek\Kasia_skrypt\dane\jm_red_2m_gran_s4'
-    file_out = file + '_raport.csv'
-    # file_out = r'E:\Radek\Kasia_skrypt\jm_red_2m_gran_s4_raport.csv'
+    file = input(r'wskaz plik: ')
+    file = file.strip('"')
+    # file = r'E:\Radek\Kasia_skrypt\dane\jm_nir_3m_gran_  s4'
     x = ListingFile(file)
-    x.read_file()
-    print('koniec')
+    x.read_file_writeraport()
