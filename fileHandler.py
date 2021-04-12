@@ -7,10 +7,11 @@ class Error(Exception):
         self.len2 = len2
 
     def __str__(self):
-        return f'Tabela z opisem stosunków {self.len1}, ma inna wielkosc niz tabela z stosunkami {self.len2}'
+        return f'Tabela z opisem stosunkow {self.len1}, ma inna wielkosc niz tabela z stosunkami {self.len2}'
 
 
 class Legend:
+    """Tworzy i edytuje opis typow."""
     def read_legend(self):
         legend_records = []
         while True:
@@ -47,6 +48,7 @@ class Legend:
 
 
 class SeparabilityListing:
+    """Ogarnia zczytanie i przygotowanie tablic z Separability Listing"""
     def __init__(self, separability_listing_array):
         self.raw_array = separability_listing_array
 
@@ -82,9 +84,10 @@ class SeparabilityListing:
 
 
 class ListingFile(Legend, SeparabilityListing):
+    """Zajmuje sie otwarciem o zaczytaniem pojedynczego pliku"""
     def __init__(self, file):
         self.file_path = file
-        self.file_out = os.path.splitext(file)[0] + '_raport.txt'
+        self.file_out = os.path.splitext(file)[0] + '_raport.csv'
 
         self.file = self.open_file()
         self.file_name = os.path.split(file)[-1]
@@ -99,6 +102,7 @@ class ListingFile(Legend, SeparabilityListing):
         self.file.close()
 
     def separability_listing_reader(self):
+        """Wyodrenia z pliku czesc z SL i wysyla do odpoweidniej klasy - generator"""
         header_main = "   Bands         AVE    MIN    Class Pairs:\n"
         header_ok = "                              Separability Listing\n"
         header_end = "                           Best Minimum Separability\n"
@@ -121,18 +125,19 @@ class ListingFile(Legend, SeparabilityListing):
                 line = line.strip()
                 array_class_pair.append(line)
 
-    def read_file_writeraport(self):
+    def legend(self):
         self.skip_lines(11)
         self.legend = self.create_legend()
-        results_dict = {}
+
+    def read_file_writeraport(self):
+        """Wczytuje plik ogarnia kolejne kroki i zapisuje raport w odpowiednim formacie"""
+        self.legend()
         outcome_file = open(self.file_out, 'w+')
         for one_band in self.separability_listing_reader():
             band, array_description, array_values = one_band
             array = zip(array_description, array_values)
             array = list(array)
-            outcoms = []
-            results_dict[band] = outcoms
-            outcome_file.write((f'band: {band}\t' + '\t'.join(self.legend.keys())))
+            outcome_file.write((f'band: {band},' + ','.join(self.legend.keys())))
             for type1, valu1 in self.legend.items():
                 outcome_file.write(f'\n{type1}')
                 for type2, valu2 in self.legend.items():
@@ -145,18 +150,57 @@ class ListingFile(Legend, SeparabilityListing):
 
                     try:
                         average = suma / amount
-                        outcome_file.write('\t' + format(average, '.2f').replace('.',','))
-                        outcoms.append([type1, type2, average])
+                        outcome_file.write(',' + format(average, '.2f'))
+                    except ZeroDivisionError:
+                        outcome_file.write(',')
+
                     except Exception as e:
-                        outcome_file.write('\t')
-                        pass
+                        raise e
+
             outcome_file.write('\n\n')
         outcome_file.close()
 
+def get_list_check(uri):
+    path = uri
+    file_list = []
+    for r, d, f in os.walk(path):
+        for file in f:
+            fileName = os.path.join(r, file)
+            file_list.append(fileName)
+    return file_list
+
+def input_data():
+    file_list = []
+    dir = input(r'Plik lub folder do przetworzenia: ')
+    while dir:
+        dir = dir.strip('"')
+        if os.path.isdir(dir):
+            dir_list = get_list_check(dir)
+            if len(dir_list) > 0:
+                file_list.extend(dir_list)
+            else:
+                print('folder nie zawiera plikow')
+
+        elif os.path.isfile(dir):
+            file_list.append(dir)
+
+        dir = input(rf'Kolejny folder, lub plik [enter konczy wprowadzanie]: ')
+
+    else:
+        file_set = set(file_list)
+        print('\n\tLista plikow do edycji:')
+        for file in file_set: print('\t\t', file)
+    return set(file_set)
 
 if __name__ == '__main__':
-    file = input(r'wskaz plik: ')
-    file = file.strip('"')
-    # file = r'E:\Radek\Kasia_skrypt\dane\jm_nir_3m_gran_  s4'
-    x = ListingFile(file)
-    x.read_file_writeraport()
+    files = input_data()
+    print('\n')
+    for file in files:
+        try:
+            x = ListingFile(file)
+            x.read_file_writeraport()
+            print(f'{file} - Stworzono raport dla pliku')
+            del x
+        except Exception as e:
+            print(f'!!!\t{file} - nie udalo sie stworzyc raportu')
+    input("press ENTER to exit")
