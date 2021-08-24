@@ -1,5 +1,5 @@
 import os
-
+import statistics
 
 class Error(Exception):
     def __init__(self, len1, len2):
@@ -145,14 +145,29 @@ class ListingFile(Legend, SeparabilityListing):
                     choosen = filter(lambda x: x[0][0] in valu1 and x[0][1] in valu2, array_copy)
 
                     values = [x[-1] for x in choosen]
-                    suma = sum(values)
-                    amount = len(values)
 
-                    try:
-                        average = suma / amount
-                        outcome_file.write(',' + format(average, '.2f'))
+                    """To co zaczyna się od # jest nieaktywne, odkomentuj odwrotnie aby znowu liczyc srednia.
+                    Dodatkowo nie jestem pewien jakie odchylenie standardowe chcesz roznice masz w linku wiec zdecyduj i
+                    ewentualnie sama zamien"""
+
+                    try: ### Dla odchylenia standardowego
+                        # https://www.calculator.net/standard-deviation-calculator.html
+                        # standard_deviation = statistics.pstdev(values)  # population
+                        standard_deviation = statistics.stdev(values)     # sample
+                        outcome_file.write(',' + format(standard_deviation, '.1f')) # Cyfra = miejsca po przecinku
+                    # try: #### Dla sredniej
+                    #     suma = sum(values)
+                    #     amount = len(values)
+                    #     average = suma / amount
+                    #     outcome_file.write(',' + format(average, '.2f'))
                     except ZeroDivisionError:
                         outcome_file.write(',')
+
+                    except statistics.StatisticsError:
+                        outcome_file.write(',')
+
+                    except TypeError:
+                        raise e
 
                     except Exception as e:
                         raise e
@@ -192,7 +207,7 @@ def input_data():
         for file in file_set: print('\t\t', file)
     return set(file_set)
 
-if __name__ == '__main__':
+def main():
     files = input_data()
     print('\n')
     for file in files:
@@ -204,3 +219,6 @@ if __name__ == '__main__':
         except Exception as e:
             print(f'!!!\t{file} - nie udalo sie stworzyc raportu')
     input("press ENTER to exit")
+
+if __name__ == '__main__':
+    main()
